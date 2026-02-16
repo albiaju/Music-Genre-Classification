@@ -1,0 +1,18 @@
+/* Main container styling */
+.main {
+    background-color: #f0f2f6;
+}
+
+/* Title styling */
+h1 {
+    color: #1f77b4;
+    text-align: center;
+}
+
+/* Upload box styling */
+.stFileUploader {
+    padding: 2rem;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
