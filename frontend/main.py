@@ -11,6 +11,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend.inference import GenreClassifier
+from backend.user_profile import UserProfile
 
 # Page Configuration
 st.set_page_config(
@@ -25,6 +26,21 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css(os.path.join(os.path.dirname(__file__), "styles.css"))
+
+# Initialize User Profile
+user_profile = UserProfile()
+
+# Sidebar - Listening History
+st.sidebar.title("🎧 Listening History")
+history = user_profile.get_history()
+if history:
+    for item in history[:5]: # Show last 5
+        st.sidebar.text(f"{item['filename']} ({item['genre']})")
+    if st.sidebar.button("Clear History"):
+        user_profile.clear_history()
+        st.experimental_rerun()
+else:
+    st.sidebar.info("No history yet. Analyze songs to build your profile!")
 
 # Title and Description
 st.title("🎵 Music Genre Classifier")
@@ -90,6 +106,11 @@ if uploaded_file is not None and classifier:
                         top_genre, top_score = predictions[0]
                         st.success(f"**Top Prediction:** {top_genre} ({top_score:.2%})")
                         
+                        # Add to User History
+                        if embedding is not None:
+                            user_profile.add_entry(uploaded_file.name, top_genre, embedding)
+                            st.toast(f"Added '{uploaded_file.name}' to your listening history!")
+
                         # Create a dataframe for the chart
                         df = pd.DataFrame(predictions, columns=["Genre", "Confidence"])
                         st.bar_chart(df.set_index("Genre"))
@@ -101,7 +122,7 @@ if uploaded_file is not None and classifier:
                         # RECOMMENDATION SECTION
                         if embedding is not None:
                             st.markdown("---")
-                            st.subheader("🎶 Recommended Songs")
+                            st.subheader("🎶 Similar Songs (Song-to-Song)")
                             recommendations = classifier.recommend(embedding, top_k=3)
                             
                             # Define local dataset path
@@ -110,13 +131,10 @@ if uploaded_file is not None and classifier:
                             if recommendations:
                                 for i, rec in enumerate(recommendations, 1):
                                     col_info, col_audio = st.columns([3, 2])
-                                    
                                     with col_info:
                                         st.write(f"**{i}. {rec['filename']}**")
                                         st.caption(f"Genre: {rec['genre']} | Similarity: {rec['score']:.2f}")
-                                    
                                     with col_audio:
-                                        # Construct full path
                                         song_path = os.path.join(DATASET_PATH, rec['genre'], rec['filename'])
                                         if os.path.exists(song_path):
                                             st.audio(song_path)
@@ -124,6 +142,27 @@ if uploaded_file is not None and classifier:
                                             st.warning("File not found locally.")
                             else:
                                 st.info("No recommendations available (Database not loaded).")
+
+                            # --- NEW: PERSONALIZED RECOMMENDATIONS ---
+                            user_embedding = user_profile.get_user_embedding()
+                            if user_embedding is not None:
+                                st.markdown("---")
+                                st.subheader("👤 Recommended For You (Based on History)")
+                                user_recs = classifier.recommend(user_embedding, top_k=3)
+
+                                if user_recs:
+                                    for i, rec in enumerate(user_recs, 1):
+                                        col_info, col_audio = st.columns([3, 2])
+                                        with col_info:
+                                            st.write(f"**{i}. {rec['filename']}**")
+                                            st.caption(f"Genre: {rec['genre']} | Match: {rec['score']:.2f}")
+                                        with col_audio:
+                                            song_path = os.path.join(DATASET_PATH, rec['genre'], rec['filename'])
+                                            if os.path.exists(song_path):
+                                                st.audio(song_path)
+                                            else:
+                                                st.warning("File not found locally.")
+                            # ----------------------------------------
 
                     else:
                         st.warning("Could not process audio.")
