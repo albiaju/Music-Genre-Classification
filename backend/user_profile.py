@@ -84,11 +84,10 @@ class UserProfile:
             return user_vector
         return None
 
-    def delete_entry(self, index):
-        """Deletes an entry at the given index."""
-        if 0 <= index < len(self.history):
-            self.history.pop(index)
-            self._save_history()
+    def delete_entry(self, filename):
+        """Deletes an entry with the given filename."""
+        self.history = [item for item in self.history if item["filename"] != filename]
+        self._save_history()
 
     def clear_history(self):
         """Clears the user history."""

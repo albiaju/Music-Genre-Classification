@@ -45,7 +45,7 @@ if history:
             """, unsafe_allow_html=True)
         with col_del:
             if st.button("Delete", key=f"del_{i}"):
-                user_profile.delete_entry(i)
+                user_profile.delete_entry(item['filename'])
                 st.rerun()
     if st.sidebar.button("Clear History"):
         user_profile.clear_history()
