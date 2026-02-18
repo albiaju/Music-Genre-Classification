@@ -43,6 +43,14 @@ class UserProfile:
         else:
             embedding_list = embedding
 
+        # Check if song is already in history
+        for item in self.history:
+            if item["filename"] == filename:
+                # Update timestamp instead of adding new entry
+                item["timestamp"] = datetime.now().isoformat()
+                self._save_history()
+                return
+
         entry = {
             "filename": filename,
             "genre": genre,
@@ -75,6 +83,12 @@ class UserProfile:
             user_vector = np.mean(embeddings, axis=0)
             return user_vector
         return None
+
+    def delete_entry(self, index):
+        """Deletes an entry at the given index."""
+        if 0 <= index < len(self.history):
+            self.history.pop(index)
+            self._save_history()
 
     def clear_history(self):
         """Clears the user history."""

@@ -16,3 +16,57 @@ h1 {
     border-radius: 10px;
     background-color: #ffffff;
 }
+
+/* History Card Styling */
+.history-card {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    border-left: 4px solid #1f77b4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.history-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.history-title {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.history-meta {
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* Delete Button Styling */
+section[data-testid="stSidebar"] div.stButton button {
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #666;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    margin-top: 5px;
+    transition: all 0.2s ease;
+}
+
+section[data-testid="stSidebar"] div.stButton button:hover {
+    color: #ff4b4b;
+    border-color: #ff4b4b;
+    background-color: rgba(255, 75, 75, 0.05);
+    background-color: rgba(255, 75, 75, 0.1);
+    transform: scale(1.1);
+}
+
+section[data-testid="stSidebar"] div.stButton button:active {
+    background-color: rgba(255, 75, 75, 0.2);
+    transform: scale(0.95);
+    color: #ff4b4b;
+}
