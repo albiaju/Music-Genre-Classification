@@ -38,8 +38,8 @@ ENV/
 # Large Data & Models
 # You can uncomment these if you want to exclude them from git
 # Models
-models/*.h5
-models/*.joblib
+# models/*.h5
+# models/*.joblib
 
 # Local Data (if any)
 data/
