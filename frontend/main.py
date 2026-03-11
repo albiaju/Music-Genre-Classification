@@ -62,7 +62,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Paths to model and encoder
-# Paths to model and encoder
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "best_yamnet_bilstm.h5")
 ENCODER_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "label_encoder.joblib")
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "song_embeddings_db.joblib")
