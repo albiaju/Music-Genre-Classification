@@ -3,6 +3,7 @@ tensorflow
 tensorflow-hub
 librosa
 numpy
+pandas
 matplotlib
 joblib
 scikit-learn

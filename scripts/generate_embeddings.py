@@ -1,4 +1,8 @@
+import sys
 import os
+# Add project root to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import joblib
 import librosa
 import numpy as np
@@ -13,8 +17,8 @@ warnings.filterwarnings('ignore')
 
 # --- CONFIGURATION ---
 DATASET_PATH = r"C:\Users\albia\Downloads\Music_Genre_dataset\Data\genres_original"
-MODEL_PATH = os.path.join("model", "best_yamnet_bilstm.h5")
-OUTPUT_PATH = os.path.join("model", "song_embeddings_db.joblib")
+MODEL_PATH = os.path.join("models", "best_yamnet_bilstm.h5")
+OUTPUT_PATH = os.path.join("models", "song_embeddings_db.joblib")
 SAMPLE_RATE = 16000
 SEGMENT_DURATION = 5  # seconds
 AUDIO_SAMPLES = SAMPLE_RATE * SEGMENT_DURATION
