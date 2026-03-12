@@ -169,8 +169,9 @@ if uploaded_file is not None and classifier:
                     st.subheader("🎶 Similar Songs (Song-to-Song)")
                     recommendations = classifier.recommend(embedding, top_k=3)
                     
-                    # Define local dataset path
+                    # Define local dataset path (if exists)
                     DATASET_PATH = r"C:\Users\albia\Downloads\Music_Genre_dataset\Data\genres_original"
+                    dataset_exists = os.path.exists(DATASET_PATH)
                     
                     if recommendations:
                         for i, rec in enumerate(recommendations, 1):
@@ -179,11 +180,14 @@ if uploaded_file is not None and classifier:
                                 st.write(f"**{i}. {rec['filename']}**")
                                 st.caption(f"Genre: {rec['genre']} | Similarity: {rec['score']:.2f}")
                             with col_audio:
-                                song_path = os.path.join(DATASET_PATH, rec['genre'], rec['filename'])
-                                if os.path.exists(song_path):
-                                    st.audio(song_path)
+                                if dataset_exists:
+                                    song_path = os.path.join(DATASET_PATH, rec['genre'], rec['filename'])
+                                    if os.path.exists(song_path):
+                                        st.audio(song_path)
+                                    else:
+                                        st.caption("Audio file not found.")
                                 else:
-                                    st.warning("File not found locally.")
+                                    st.caption("Playback unavailable (Local-only)")
                     else:
                         st.info("No recommendations available (Database not loaded).")
 
@@ -201,11 +205,14 @@ if uploaded_file is not None and classifier:
                                     st.write(f"**{i}. {rec['filename']}**")
                                     st.caption(f"Genre: {rec['genre']} | Match: {rec['score']:.2f}")
                                 with col_audio:
-                                    song_path = os.path.join(DATASET_PATH, rec['genre'], rec['filename'])
-                                    if os.path.exists(song_path):
-                                        st.audio(song_path)
+                                    if dataset_exists:
+                                        song_path = os.path.join(DATASET_PATH, rec['genre'], rec['filename'])
+                                        if os.path.exists(song_path):
+                                            st.audio(song_path)
+                                        else:
+                                            st.caption("Audio file not found.")
                                     else:
-                                        st.warning("File not found locally.")
+                                        st.caption("Playback unavailable.")
                     # ----------------------------------------
 
 # Model Performance Section
